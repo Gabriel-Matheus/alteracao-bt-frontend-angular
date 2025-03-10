@@ -7,21 +7,20 @@
 </head>
 <body>
 <header>
-  <img src="/images/gladio_alado.png" alt="Gládio Alado - Força Aérea Brasileira">
+  <img src="static/gladio_alado.png" alt="Gládio Alado - Força Aérea Brasileira">
   <h1>Proposta de Alteração de Boletim Técnico</h1>
-  <img src="/images/gladio_alado.png" alt="Gládio Alado - Força Aérea Brasileira">
+  <img src="static/gladio_alado.png" alt="Gládio Alado - Força Aérea Brasileira">
 </header>
 
 <div class="list-title">Detalhes do Projeto</div>
 
-<form method="post">
   <div class="top-fields">
     <div class="field" >
       <label>Projeto:</label>
-      <div class="dropdown-div" (focusin)="isOpenCdProjetoButton = true" (focusout)="onBlur()">
+      <div class="dropdown-div" (focusin)="isOpenCdProjetoButton = true" (focusout)="onBlurCdProjeto()">
         <input class="dropdown-input"
-               [(ngModel)]="selectedCdProjeto"
                (input)="onSearchCdProjeto(selectedCdProjeto)"
+               value="{{selectedCdProjeto}}"
                autocomplete="off"
                name="cdProjeto" placeholder="Digite o código do projeto">
       <div *ngIf="isOpenCdProjetoButton" class="dropdown-list">
@@ -36,10 +35,11 @@
     </div>
     <div class="field">
       <label>Sigla do Projeto:</label>
-      <div class="dropdown-div" (focusin)="isOpenSgProjetoButton = true" (focusout)="onBlur()">
+      <div class="dropdown-div" (focusin)="isOpenSgProjetoButton = true" (focusout)="onBlurSgProjeto()">
         <input class="dropdown-input"
-               [(ngModel)]="selectedSgProjeto"
                (input)="onSearchSgProjeto(selectedSgProjeto)"
+               value="{{selectedSgProjeto}}"
+               autocomplete="off"
                name="cdProjeto" placeholder="Digite o código do projeto">
         <div *ngIf="isOpenSgProjetoButton" class="dropdown-list">
           <ul>
@@ -56,7 +56,6 @@
       <input type="text" value="" placeholder="Descrição do projeto" style="text-align: center;" disabled>
     </div>
   </div>
-</form>
 
 <div class="container-wrapper">
   <div class="container">

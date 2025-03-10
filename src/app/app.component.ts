@@ -33,9 +33,14 @@ export class AppComponent implements OnInit {
     });
   }
 
-  onBlur() : void {
+  onBlurCdProjeto() : void {
     setTimeout(() => {
       this.isOpenCdProjetoButton = false }, 200);
+  }
+
+  onBlurSgProjeto() : void {
+    setTimeout(() => {
+      this.isOpenSgProjetoButton = false }, 200);
   }
 
   // Função para filtrar os projetos conforme o usuário digita
@@ -50,6 +55,13 @@ export class AppComponent implements OnInit {
     }
   }
 
+  // Função para selecionar um projeto
+  onSelectCdProjeto(projeto: Projeto): void {
+    this.selectedCdProjeto = projeto.cdProjeto;
+    setTimeout(() => {
+      this.isOpenCdProjetoButton = false }, 200);
+  }
+
   onSearchSgProjeto(query: string): void {
     if (query) {
       this.filteredProjetos = this.projetos.filter(projeto =>
@@ -59,13 +71,6 @@ export class AppComponent implements OnInit {
     } else {
       this.filteredProjetos = this.projetos;
     }
-  }
-
-  // Função para selecionar um projeto
-  onSelectCdProjeto(projeto: Projeto): void {
-    this.selectedCdProjeto = projeto.cdProjeto;
-    setTimeout(() => {
-      this.isOpenCdProjetoButton = false }, 200);
   }
 
   onSelectSgProjeto(projeto: Projeto): void {
