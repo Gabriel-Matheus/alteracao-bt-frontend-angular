@@ -7,6 +7,20 @@ interface Projeto {
   dsProjeto: string;
 }
 
+interface Material {
+  cdMaterial: string;
+  nrPn: string;
+}
+
+interface Boletim {
+  idBoletim: string;
+  nrBoletim: string;
+  cdMaterial: string;
+  dtInsert:string;
+  nrRevisao: string;
+  dtRevisao: string;
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -17,9 +31,15 @@ export class AppComponent implements OnInit {
   title = 'alteracao-bt-frontend-angular';
 
   projetos: Projeto[] = [];
-  filteredProjetos: Projeto[] = [];
+  materiais: Material[] = [];
+  boletins: Boletim[]= [];
+  filteredCdProjetos: Projeto[] = [];
+  filteredSgProjetos: Projeto[] = [];
   selectedCdProjeto: string = '';
   selectedSgProjeto: string = '';
+  selectedDsProjeto: string = '';
+  selectedCdMaterial: string = '';
+  selectedNrPn: string = '';
   isOpenCdProjetoButton: boolean = false; // Adicionando estado para manter a lista aberta ou fechada
   isOpenSgProjetoButton: boolean = false;
 
@@ -29,9 +49,44 @@ export class AppComponent implements OnInit {
   update() {
     this.http.get<Projeto[]>("http://localhost:8080").subscribe((data) => {
       this.projetos = data;
-      this.filteredProjetos = data;
+      this.filteredCdProjetos = data;
+      this.filteredSgProjetos = data;
     });
   }
+
+  onButtonCdProject(){
+    this.http.get<Material[]>(`http://localhost:8080/buscar-materiais?cdProjeto=${this.selectedCdProjeto}`).subscribe((data) => {
+    this.materiais = data;
+    });
+    let projetoEncontrado: Projeto | undefined = this.projetos.find(projeto => projeto.cdProjeto == this.selectedCdProjeto)
+    if(projetoEncontrado) {
+      this.selectedSgProjeto = projetoEncontrado.sgProjeto;
+      this.selectedDsProjeto = projetoEncontrado.dsProjeto;
+    }
+  }
+
+  onButtonSgProject(){
+    let projetoEncontrado: Projeto | undefined = this.projetos.find(projeto => projeto.sgProjeto == this.selectedSgProjeto)
+    if(projetoEncontrado){
+      this.selectedCdProjeto = projetoEncontrado.cdProjeto;
+      this.selectedDsProjeto = projetoEncontrado.dsProjeto;
+      this.http.get<Material[]>(`http://localhost:8080/buscar-materiais?cdProjeto=${this.selectedCdProjeto}`).subscribe((data) => {
+        this.materiais = data;
+      });
+    }
+  }
+
+
+  onButtonMaterial(nrPn: string): void{
+    let materialEncontrado: Material | undefined = this.materiais.find(material => material.nrPn == nrPn)
+    if(materialEncontrado) {
+      this.selectedCdMaterial = materialEncontrado.cdMaterial;
+      this.http.get<Boletim[]>(`http://localhost:8080/buscar-boletins?cdMaterial=${this.selectedCdMaterial}`).subscribe((data) => {
+        this.boletins = data;
+      });
+    }
+  }
+
 
   onBlurCdProjeto() : void {
     setTimeout(() => {
@@ -43,19 +98,31 @@ export class AppComponent implements OnInit {
       this.isOpenSgProjetoButton = false }, 200);
   }
 
-  // Função para filtrar os projetos conforme o usuário digita
+  onFocusCdProjeto() : void {
+    this.filteredCdProjetos = this.projetos.filter(projeto =>
+      projeto.cdProjeto.toLowerCase().startsWith(this.selectedCdProjeto.toLowerCase())
+    );
+    this.isOpenCdProjetoButton=true;
+  }
+
+  onFocusSgProjeto() : void {
+    this.filteredSgProjetos = this.projetos.filter(projeto =>
+      projeto.sgProjeto.toLowerCase().startsWith(this.selectedSgProjeto.toLowerCase())
+    );
+    this.isOpenSgProjetoButton=true;
+  }
+
   onSearchCdProjeto(query: string): void {
     if (query) {
-      this.filteredProjetos = this.projetos.filter(projeto =>
-        projeto.cdProjeto.toLowerCase().includes(query.toLowerCase())
+      this.filteredCdProjetos = this.projetos.filter(projeto =>
+        projeto.cdProjeto.toLowerCase().startsWith(query.toLowerCase())
       );
       this.isOpenCdProjetoButton=true;
     } else {
-      this.filteredProjetos = this.projetos;
+      this.filteredCdProjetos = this.projetos;
     }
   }
 
-  // Função para selecionar um projeto
   onSelectCdProjeto(projeto: Projeto): void {
     this.selectedCdProjeto = projeto.cdProjeto;
     setTimeout(() => {
@@ -64,12 +131,12 @@ export class AppComponent implements OnInit {
 
   onSearchSgProjeto(query: string): void {
     if (query) {
-      this.filteredProjetos = this.projetos.filter(projeto =>
-        projeto.sgProjeto.toLowerCase().includes(query.toLowerCase())
+      this.filteredSgProjetos = this.projetos.filter(projeto =>
+        projeto.sgProjeto.toLowerCase().startsWith(query.toLowerCase())
       );
       this.isOpenSgProjetoButton=true;
     } else {
-      this.filteredProjetos = this.projetos;
+      this.filteredSgProjetos = this.projetos;
     }
   }
 
