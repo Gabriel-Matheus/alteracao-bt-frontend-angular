@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Proposta de Alteração de Boletim Técnico</title>
+
+</head>
+<body>
+<header>
+  <img src="static/gladio_alado.png" alt="Gládio Alado - Força Aérea Brasileira">
+  <h1>Proposta de Alteração de Boletim Técnico</h1>
+  <img src="static/gladio_alado.png" alt="Gládio Alado - Força Aérea Brasileira">
+</header>
+
+<div class="list-title">Detalhes do Projeto</div>
+
+<div class="top-fields">
+  <div class="field" >
+    <label>Projeto:</label>
+    <div class="dropdown-div" (focusin)="onFocusCdProjeto()" (focusout)="onBlurCdProjeto()">
+      <input class="dropdown-input"
+             [(ngModel)]="selectedCdProjeto"
+             (input)="onSearchCdProjeto(selectedCdProjeto)"
+             autocomplete="off"
+             name="cdProjeto" placeholder="Digite o código do projeto">
+      <div *ngIf="isOpenCdProjetoButton" class="dropdown-list">
+        <ul>
+          <li *ngFor="let projeto of filteredCdProjetos" (click)="onSelectCdProjeto(projeto)">
+            {{ projeto.cdProjeto }}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <button class="button-search"
+            (click)="onButtonCdProject()"
+            type="submit">Pesquisar por Projeto</button> <!-- Botão de pesquisa para cdProjeto -->
+  </div>
+  <div class="field">
+    <label>Sigla do Projeto:</label>
+    <div class="dropdown-div" (focusin)="onFocusSgProjeto()" (focusout)="onBlurSgProjeto()">
+      <input class="dropdown-input"
+             [(ngModel)]="selectedSgProjeto"
+             (input)="onSearchSgProjeto(selectedSgProjeto)"
+             autocomplete="off"
+             name="cdProjeto" placeholder="Digite o código do projeto">
+      <div *ngIf="isOpenSgProjetoButton" class="dropdown-list">
+        <ul>
+          <li *ngFor="let projeto of filteredSgProjetos" (click)="onSelectSgProjeto(projeto)">
+            {{ projeto.sgProjeto }}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <button class="button-search"
+            (click)="onButtonSgProject()"
+            type="submit">Pesquisar por Sigla</button> <!-- Botão de pesquisa para sgProjeto -->
+  </div>
+  <div class="field">
+    <label>Descrição:</label>
+    <input type="text" [(ngModel)] = "selectedDsProjeto" placeholder="Descrição do projeto" style="text-align: center;" disabled>
+  </div>
+</div>
+
+<div class="container-wrapper">
+  <div class="container">
+    <div class="list-title">PN/LHA</div>
+    <table>
+      <thead>
+      <tr>
+        <th>PN/LHA</th>
+      </tr>
+      </thead>
+      <tbody *ngFor="let materiais of materiais">
+      <tr>
+        <td>
+          <button
+            (click)="onButtonMaterial(materiais.nrPn)" class="button-like-input">
+            {{ materiais.nrPn }}
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="container">
+    <div class="list-title">Boletins Existentes</div>
+    <table>
+      <thead>
+      <tr>
+        <th>Número</th>
+        <th>Revisões</th>
+        <th>Data</th>
+      </tr>
+      </thead>
+      <tbody *ngFor="let boletins of boletins">
+      <tr>
+        <td><input type="text" value="{{boletins.nrBoletim}}" style="text-align: center;" disabled></td>
+        <td><input type="text" value="{{boletins.nrRevisao}}" style="text-align: center;" disabled></td>
+        <td><input type="text" value="{{boletins.dtRevisao}}" style="text-align: center;" disabled></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="container">
+    <div class="list-title">Origem da Proposta</div>
+    <div class="origem-fields">
+      <div class="field">
+        <label>Unidade:</label>
+        <input type="text" value="" style="text-align: center;">
+      </div>
+      <div class="field">
+        <label>Setor:</label>
+        <input type="text" value="" style="text-align: center;">
+      </div>
+    </div>
+    <div class="list-title">Ação</div>
+    <div class="button-container">
+      <button>Criar proposta de novo BT</button>
+      <button>Criar proposta de alteração de BT</button>
+      <button>Ver propostas em andamento</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
